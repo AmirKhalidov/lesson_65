@@ -1,0 +1,137 @@
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --background-color: #f5f6fa;
+    --text-color: #2c3e50;
+    --border-radius: 8px;
+    --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+ul {
+    list-style: none;
+}
+
+li {
+    list-style: none;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+button {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+#countrySearchForm {
+    margin: 20px 0;
+    display: flex;
+    gap: 10px;
+}
+
+#countryInput {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    width: 250px;
+    font-size: 16px;
+}
+
+#countriesList {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+#countriesList p {
+  margin: 5px 0;
+  font-size: 1.1em;
+  display: flex;
+  gap: 8px;
+}
+
+#countriesList p::before {
+  content: attr(data-label);
+  font-weight: 600;
+  color: var(--secondary-color);
+  min-width: 80px;
+}
+
+.country-details p {
+  margin: 10px 0;
+  font-size: 1.2em;
+  display: flex;
+  gap: 12px;
+}
+
+.country-details p::before {
+  content: attr(data-label);
+  font-weight: 600;
+  color: var(--secondary-color);
+  min-width: 100px;
+}
+
+#countriesList li {
+    background: white;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#countriesList img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+}
+
+#countriesList p {
+    margin: 5px 0;
+    font-size: 1.1em;
+}
+
+.error-message {
+    color: #e74c3c;
+    padding: 10px;
+    background-color: #ffeaea;
+    border-radius: var(--border-radius);
+    margin: 10px 0;
+}
+
+/* Country Details Styles */
+.country-details {
+    background: white;
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.country-details p {
+    font-size: 1.2em;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+}
