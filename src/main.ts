@@ -27,6 +27,7 @@ interface Country {
 }
 
 const bodyEl = document.querySelector('body') as HTMLBodyElement;
+const initialHTML = bodyEl.innerHTML;
 
 const myCountryBtn = document.querySelector(
     '#myCountryBtn'
@@ -40,6 +41,8 @@ const countryInput = document.querySelector(
 const countriesList = document.querySelector(
     '#countriesList'
 ) as HTMLUListElement;
+
+history.replaceState({ initial: true }, '', '/');
 
 function getMyLocation(): Promise<GeolocationCoordinates> {
     return new Promise((resolve, reject) => {
@@ -60,6 +63,10 @@ myCountryBtn?.addEventListener('click', async () => {
         );
 
         const countries = await fetchCountries(data.countryName);
+
+        const historyObject = data.countryName;
+
+        history.pushState({ historyObject }, '', `/${historyObject}`);
 
         renderCountries(countries!);
 
@@ -142,9 +149,12 @@ function renderCountries(countries: Country[]) {
 }
 
 function handleCountryDetails(country: Country) {
-    const historyObject = country.name.official;
-
-    history.pushState({ historyObject }, '', `/${country.name.official}`);
+    console.log(country);
+    history.pushState(
+        { countryData: country },
+        '',
+        `/${country.name.official}`
+    );
     console.log(history);
 
     const populationEl = document.createElement('p');
@@ -173,5 +183,45 @@ function handleCountryDetails(country: Country) {
     bodyEl!.innerHTML = '';
     bodyEl.append(detailsLi);
 
-    backBtn.addEventListener('click', () => {});
+    backBtn.addEventListener('click', () => {
+        history.back();
+    });
 }
+
+window.addEventListener('popstate', (event) => {
+    if (!event.state || !event.state.countryData) {
+        bodyEl.innerHTML = initialHTML;
+
+        const myCountryBtn = document.querySelector(
+            '#myCountryBtn'
+        ) as HTMLButtonElement;
+        const countrySearchForm = document.querySelector(
+            '#countrySearchForm'
+        ) as HTMLFormElement;
+
+        myCountryBtn?.addEventListener('click', async () => {
+            try {
+                const { latitude, longitude } = await getMyLocation();
+                const { data } = await axios.get<ReverseGeocodeResponse>(
+                    `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}`
+                );
+                const countries = await fetchCountries(data.countryName);
+                renderCountries(countries!);
+            } catch (error) {
+                console.error(error);
+            }
+        });
+
+        countrySearchForm?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const countryInput = document.querySelector(
+                '#countryInput'
+            ) as HTMLInputElement;
+            if (!countryInput.value) return;
+            const countries = await fetchCountries(countryInput.value);
+            renderCountries(countries!);
+        });
+    } else {
+        handleCountryDetails(event.state.countryData);
+    }
+});
